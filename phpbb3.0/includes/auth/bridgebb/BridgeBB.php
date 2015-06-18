@@ -1,19 +1,22 @@
 <?php
 
-class BridgeBB {
-
-    public static function login($username, $password) {
+class BridgeBB
+{
+    public static function login($username, $password)
+    {
         if (is_null($password)) {
             return self::_error(LOGIN_ERROR_PASSWORD, 'NO_PASSWORD_SUPPLIED');
         }
         if (is_null($username)) {
             return self::_error(LOGIN_ERROR_USERNAME, 'LOGIN_ERROR_USERNAME');
         }
+
         return self::_apiValidate($username, $password);
     }
 
-    private static function _apiValidate($username, $password) {
-        $request = file_get_contents(LARAVEL_URL . '/login/' . BRIDGEBB_API_KEY . '/' . $username . '/' . $password, "r");
+    private static function _apiValidate($username, $password)
+    {
+        $request = file_get_contents(LARAVEL_URL.'/login/'.BRIDGEBB_API_KEY.'/'.$username.'/'.$password, 'r');
         $oResponse = json_decode($request, true);
         if ($oResponse['code'] === '200') {
             //TODO: Consume returned user account information like email
@@ -23,7 +26,8 @@ class BridgeBB {
         }
     }
 
-    private static function _handleAuthSuccess($username, $password) {
+    private static function _handleAuthSuccess($username, $password)
+    {
         $row = BridgeBBDBAL::getUserByUsername($username);
         // Does User exist?
         if ($row) {
@@ -36,11 +40,13 @@ class BridgeBB {
         } else {
             // this is the user's first login so create an empty profile
             $newUser = self::createUserRow($username, sha1($password));
+
             return self::_success(LOGIN_SUCCESS_CREATE_PROFILE, $newUser);
         }
     }
 
-    public static function createUserRow($username, $password) {
+    public static function createUserRow($username, $password)
+    {
         global $user;
         // first retrieve default group id
         $row = BridgeBBDBAL::getDefaultGroupID();
@@ -59,7 +65,8 @@ class BridgeBB {
         );
     }
 
-    private static function _error($status, $message, $row = array('user_id' => ANONYMOUS)) {
+    private static function _error($status, $message, $row = array('user_id' => ANONYMOUS))
+    {
         return array(
             'status' => $status,
             'error_msg' => $message,
@@ -67,12 +74,12 @@ class BridgeBB {
         );
     }
 
-    private static function _success($status, $row) {
+    private static function _success($status, $row)
+    {
         return array(
             'status' => $status,
             'error_msg' => false,
             'user_row' => $row,
         );
     }
-
 }

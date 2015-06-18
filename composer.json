@@ -15,7 +15,7 @@
     },
     "autoload": {
         "psr-0": {
-            "CallMeNP\\LaraAuthBridge\\": "src/"
+            "CallMeNP\\LaraAuthBridge": "src/"
         }
     },
     "scripts": {
