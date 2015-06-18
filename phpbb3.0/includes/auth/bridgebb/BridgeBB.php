@@ -20,7 +20,7 @@ class BridgeBB
         $oResponse = json_decode($request, true);
         if ($oResponse['code'] === '200') {
             //TODO: Consume returned user account information like email
-            self::_handleAuthSuccess($username, $password);
+            return self::_handleAuthSuccess($username, $password);
         } else {
             return self::_error(LOGIN_ERROR_USERNAME, 'LOGIN_ERROR_USERNAME');
         }
