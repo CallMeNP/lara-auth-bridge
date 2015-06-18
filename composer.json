@@ -1,0 +1,25 @@
+{
+    "name": "callmenp/lara-auth-bridge",
+    "description": "Offers a simple API for the included custom phpBB authentication module.",
+    "keywords": ["phpbb", "phpbb3", "bridge", "laravel", "laravel5"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "CallMeNP",
+            "email": "np.liamg@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "illuminate/support": "5.*"
+    },
+    "autoload": {
+        "psr-0": {
+            "CallMeNP\\LaraAuthBridge\\": "src/"
+        }
+    },
+    "scripts": {
+        "post-install-cmd": "php artisan vendor:publish callmenp/lara-auth-bridge"
+    },
+    "minimum-stability": "stable"
+}
