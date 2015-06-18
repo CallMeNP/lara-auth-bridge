@@ -3,6 +3,7 @@
 namespace CallMeNP\LaraAuthBridge\Controllers;
 
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class ApiController extends Controller
 {
