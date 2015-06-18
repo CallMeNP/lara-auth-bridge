@@ -2,6 +2,7 @@
 namespace CallMeNP\LaraAuthBridge;
 
 use Illuminate\Support\ServiceProvider;
+use Route;
 
 class LaraAuthBridgeServiceProvider extends ServiceProvider {
 
