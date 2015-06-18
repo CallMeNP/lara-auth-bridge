@@ -24,7 +24,7 @@ class LaraAuthBridgeServiceProvider extends ServiceProvider {
 			__DIR__.'../../config/lara-auth-bridge.php' => config_path('lara-auth-bridge.php')
 		], 'config');
 
-		Route::controller('/auth-bridge', 'CallMeNP\LaraAuthBridge\Controllers\Api');
+		//Route::controller('/auth-bridge', 'CallMeNP\LaraAuthBridge\Controllers\Api');
 	}
 
 	public function register()
