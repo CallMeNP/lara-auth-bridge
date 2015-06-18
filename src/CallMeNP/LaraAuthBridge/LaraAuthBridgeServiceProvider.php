@@ -25,4 +25,9 @@ class LaraAuthBridgeServiceProvider extends ServiceProvider {
 
 		Route::controller('/auth-bridge', 'CallMeNP\LaraAuthBridge\Controllers\Api');
 	}
+
+	public function register()
+	{   
+		//
+	}  
 }
