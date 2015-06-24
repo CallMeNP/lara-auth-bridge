@@ -1,12 +1,10 @@
+Allows phpBB3.0(not yet 3.1) to use the Laravel5.\*(for 4.\* see [r-a-stone's work](https://github.com/r-a-stone/Laravel-Auth-Bridge)) Auth driver to create/authenticate accounts.
+
 based on https://github.com/r-a-stone/Laravel-Auth-Bridge
 
-rewrite controller in laravel5.0's way, and api response in my team spec.
+rewrite controller in for laravel5.0.
 
-but don't know how to merge back...
-
-so, change the namespace for submit to packagist.org
-
-thanks for r-a-stone's work, I'll make some pull requests later.
+[![Latest Stable Version](https://poser.pugx.org/callmenp/lara-auth-bridge/v/stable)](https://packagist.org/packages/callmenp/lara-auth-bridge) [![Total Downloads](https://poser.pugx.org/callmenp/lara-auth-bridge/downloads)](https://packagist.org/packages/callmenp/lara-auth-bridge) [![License](https://poser.pugx.org/callmenp/lara-auth-bridge/license)](https://packagist.org/packages/callmenp/lara-auth-bridge)
 
 ### Installation
 #### Laravel
