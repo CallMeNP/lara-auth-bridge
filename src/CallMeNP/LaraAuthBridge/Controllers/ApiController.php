@@ -20,7 +20,14 @@ class ApiController extends Controller
     }
     private function _validateCredentials($username, $password)
     {
-        if (Auth::validate(['name' => $username, 'password' => $password])) {
+		if (strstr($username, '@')) {
+            $field = [config('lara-auth-bridge.user_model.email_column')=>$username, 'password' => $password];
+        } elseif (preg_match("/1[34578]{1}\d{9}$/", $username)) {
+            $field = [config('lara-auth-bridge.user_model.phone_column')=>$username, 'password' => $password];
+        } else {
+            $field = [config('lara-auth-bridge.user_model.name_column')=>$username, 'password' => $password];
+        }
+        if (Auth::validate($field)) {
             //TODO: Return user account information like email
             return true;
         }
