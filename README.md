@@ -35,7 +35,7 @@ Copy all files in the phpBB3.0 directory to your phpBB install
 ##### edit config
 Edit the file located at {PHPBB-ROOT}/includes/auth/auth_bridgebb.php
 ``` php
-define('LARAVEL_URL', 'http://www.example.com/auth-bridge'); //your laravel application's url
+define('LARAVEL_URL', 'http://www.example.com/auth-bridge/login'); //your laravel application's url
 define('BRIDGEBB_API_KEY', "yoursecretapikey"); //the same key you created earlier
 ```
 ###### setting
