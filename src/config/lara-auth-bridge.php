@@ -2,11 +2,9 @@
 
 return [
     'appkey' => 'yoursecretapikey',
+    'client_auth' => false,
     'user_model' => [
-        'username_column' => 'username',
-		'email_column'    => 'email',
-		'phone_column'    => 'phone',
+        'username_column' => 'email',
         'password_column' => 'password',
-		
     ],
 ];

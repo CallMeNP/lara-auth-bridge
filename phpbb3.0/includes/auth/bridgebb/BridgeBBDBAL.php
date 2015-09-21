@@ -5,13 +5,13 @@ class BridgeBBDBAL
     public static function getUserByUsername($username)
     {
         global $db;
-        $sql = 'SELECT user_id, username, user_password, user_passchg, user_email, user_type
+        $username = mb_strtolower($username);
+        $sql = 'SELECT *
             FROM '.USERS_TABLE."
-            WHERE username = '".$db->sql_escape($username)."'";
+            WHERE LOWER(username) = '".$db->sql_escape($username)."'";
         $result = $db->sql_query($sql);
         $row = $db->sql_fetchrow($result);
         $db->sql_freeresult($result);
-
         return $row;
     }
 

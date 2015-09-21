@@ -14,19 +14,105 @@ class BridgeBB
         return self::_apiValidate($username, $password);
     }
 
-    private static function _apiValidate($username, $password)
+    public static function autologin()
     {
-        $request = file_get_contents(LARAVEL_URL.'/login/'.BRIDGEBB_API_KEY.'/'.$username.'/'.$password, 'r');
-        $oResponse = json_decode($request, true);
-        if ($oResponse['code'] === '200') {
-            //TODO: Consume returned user account information like email
-            return self::_handleAuthSuccess($username, $password);
-        } else {
-            return self::_error(LOGIN_ERROR_USERNAME, 'LOGIN_ERROR_USERNAME');
+        try {
+            $request = self::_makeApiRequest([],'GET');
+            $oResponse = json_decode($request, true);
+
+            if (isset($oResponse['data']['username']) && isset($oResponse['code'])) {
+                if ($oResponse['code'] === '200' && $oResponse['data']['username']) {
+                    $row = BridgeBBDBAL::getUserByUsername($oResponse['data']['username']);
+                    return ($row)?$row:[];
+                }
+            }
+            return [];
+        } catch (Exception $e) {
+            return [];
         }
     }
 
-    private static function _handleAuthSuccess($username, $password)
+    public static function validateSession($user_row)
+    {
+        try {
+            $request = self::_makeApiRequest([],'GET');
+            $oResponse = json_decode($request, true);
+
+            if (isset($oResponse['data']['username']) && isset($oResponse['code'])) {
+                if ($oResponse['code'] === '200' && $oResponse['data']['username']) {
+                    return ($user_row['username'] == $oResponse['data']['username'])?true:false;
+                }
+            }
+
+            return false;
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+    public static function logOut($user_row)
+    {
+        try {
+            if (self::validateSession($user_row)) {
+                self::_makeApiRequest([],'DELETE');
+            }
+        } catch (Exception $e) {
+        }
+    }
+
+    private static function _makeApiRequest($data,$method) {
+        $ch = curl_init();
+        $cooks = '';
+        foreach ($_COOKIE as $k=>$v) {
+            $cooks .= $k.'='.$v.';';
+        }
+
+        $curlConfig = [
+            CURLOPT_URL            => LARAVEL_URL.'/auth-bridge/login',
+            CURLOPT_COOKIESESSION  => true,
+            CURLOPT_COOKIE         => $cooks,
+            CURLINFO_HEADER_OUT    => true,
+            CURLOPT_HEADERFUNCTION => 'curlResponseHeaderCallback',
+            CURLOPT_RETURNTRANSFER => true
+        ];
+
+        if ($method == 'POST') {
+            $curlConfig[CURLOPT_POST] = true;
+            $curlConfig[CURLOPT_POSTFIELDS] = $data;
+        } elseif ($method == 'DELETE') {
+            $curlConfig[CURLOPT_CUSTOMREQUEST] = 'DELETE';
+        }
+
+        curl_setopt_array($ch, $curlConfig);
+        $result = curl_exec($ch);
+        curl_close($ch);
+        return $result;
+    }
+
+    private static function _apiValidate($username, $password)
+    {
+        try {
+            $postdata = http_build_query(
+                array(
+                    'appkey' => BRIDGEBB_API_KEY,
+                    'username' => $username,
+                    'password' => $password
+                )
+            );
+            $request = self::_makeApiRequest($postdata,'POST');
+
+            $oResponse = json_decode($request, true);
+            if ($oResponse['code'] === '200') {
+                return self::_handleAuthSuccess($username, $password, $oResponse['data']);
+            } else {
+                return self::_error(LOGIN_ERROR_USERNAME, 'LOGIN_ERROR_USERNAME');
+            }
+        } catch (Exception $e) {
+            return self::_error(LOGIN_ERROR_EXTERNAL_AUTH, $e->getMessage());
+        }
+    }
+
+    private static function _handleAuthSuccess($username, $password, $user_laravel)
     {
         $row = BridgeBBDBAL::getUserByUsername($username);
         // Does User exist?
@@ -39,13 +125,13 @@ class BridgeBB
             }
         } else {
             // this is the user's first login so create an empty profile
-            $newUser = self::createUserRow($username, sha1($password));
+            $newUser = self::createUserRow($username, sha1($password), $user_laravel);
 
             return self::_success(LOGIN_SUCCESS_CREATE_PROFILE, $newUser);
         }
     }
 
-    public static function createUserRow($username, $password)
+    public static function createUserRow($username, $password, $user_laravel)
     {
         global $user;
         // first retrieve default group id
@@ -55,14 +141,22 @@ class BridgeBB
         }
 
         // generate user account data
-        return array(
+        $userRow = array(
             'username' => $username,
             'user_password' => phpbb_hash($password),
-            'user_email' => '', //TODO: Set this from the laravel users later
             'group_id' => (int) $row['group_id'],
             'user_type' => USER_NORMAL,
             'user_ip' => $user->ip,
         );
+
+        if (LARAVEL_CUSTOM_USER_DATA && $laravel_fields = unserialize(LARAVEL_CUSTOM_USER_DATA)) {
+            foreach ($laravel_fields as $key => $value) {
+                if (isset($user_laravel[$key])) {
+                    $userRow[$value] = $user_laravel[$key];
+                }
+            }
+        }
+        return $userRow;
     }
 
     private static function _error($status, $message, $row = array('user_id' => ANONYMOUS))
@@ -82,4 +176,13 @@ class BridgeBB
             'user_row' => $row,
         );
     }
+}
+
+function curlResponseHeaderCallback($ch, $headerLine) {
+    preg_match_all('/^Set-Cookie:\s*([^;]*)/mi', $headerLine, $matches);
+    foreach($matches[1] as $item) {
+        parse_str($item, $cookie);
+        setcookie(key($cookie), $cookie[key($cookie)], time() + 86400, "/");
+    }
+    return strlen($headerLine); // Needed by curl
 }
