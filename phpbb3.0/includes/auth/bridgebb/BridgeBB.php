@@ -4,6 +4,10 @@ class BridgeBB
 {
     public static function login($username, $password)
     {
+        if (self::validateSession(['username'=>$username])) {
+            return self::_success(LOGIN_SUCCESS, self::autologin());
+        }
+
         if (is_null($password)) {
             return self::_error(LOGIN_ERROR_PASSWORD, 'NO_PASSWORD_SUPPLIED');
         }
@@ -121,13 +125,18 @@ class BridgeBB
             if ($row['user_type'] == USER_INACTIVE || $row['user_type'] == USER_IGNORE) {
                 return self::_error(LOGIN_ERROR_ACTIVE, 'ACTIVE_ERROR', $row);
             } else {
-                return self::_success(LOGIN_SUCCESS, $row);
+                // Session hack
+                header("Location: http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
+                die();
+//                return self::_success(LOGIN_SUCCESS, $row);
             }
         } else {
             // this is the user's first login so create an empty profile
-            $newUser = self::createUserRow($username, sha1($password), $user_laravel);
-
-            return self::_success(LOGIN_SUCCESS_CREATE_PROFILE, $newUser);
+            user_add(self::createUserRow($username, sha1($password), $user_laravel));
+            // Session hack
+            header("Location: http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
+            die();
+//            return self::_success(LOGIN_SUCCESS_CREATE_PROFILE, $newUser);
         }
     }
 

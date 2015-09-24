@@ -19,11 +19,7 @@ require __DIR__.'/bridgebb/BridgeBB.php';
 // Login method
 function login_bridgebb($username, $password)
 {
-    Bridgebb::login($username, $password);
-
-    // Session hack
-    header("Location: http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
-    die();
+    return Bridgebb::login($username, $password);
 }
 
 // If user auth on laravel side but not in phpBB try to auto login
