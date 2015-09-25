@@ -1,6 +1,6 @@
 # Allows phpBB 3.1 auth over Laravel 5
 
-For phpBB 3.0 see [phpBB-3.0 brunch](https://github.com/CallMeNP/lara-auth-bridge/tree/)
+For phpBB 3.0 see [phpBB-3.0 brunch](https://github.com/CallMeNP/lara-auth-bridge/tree/phpBB-3.0)
 
 For Laravel 4.\* see [r-a-stone's work](https://github.com/r-a-stone/Laravel-Auth-Bridge) Auth driver to create/authenticate accounts.
 
