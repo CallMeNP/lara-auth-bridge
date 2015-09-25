@@ -1,0 +1,27 @@
+{
+  "name": "laravel/bridgebb",
+  "type": "phpbb-extension",
+  "description": "Bridging that auth from laravel5",
+  "homepage": "https://github.com/CallMeNP/lara-auth-bridge",
+  "version": "2.0.0",
+  "time": "2015-09-25",
+  "license": "MIT",
+  "authors": [{
+    "name": "Denis Golubovskiy",
+    "email": "bukashk0zzz@me.com",
+    "homepage": "http://mysimple.name",
+    "role": "Developer"
+  }],
+  "require": {
+    "php": ">=5.3.3"
+  },
+  "require-dev": {
+    "phpbb/epv": "dev-master"
+  },
+  "extra": {
+    "display-name": "BridgeBB Laravel5 Authentication",
+    "soft-require": {
+      "phpbb/phpbb": ">=3.1.0-RC2,<3.2.*@dev"
+    }
+  }
+}
