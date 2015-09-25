@@ -2,7 +2,7 @@
 
 For phpBB 3.0 see [phpBB-3.0 brunch](https://github.com/CallMeNP/lara-auth-bridge/tree/)
 
-For 4.\* see [r-a-stone's work](https://github.com/r-a-stone/Laravel-Auth-Bridge) Auth driver to create/authenticate accounts.
+For Laravel 4.\* see [r-a-stone's work](https://github.com/r-a-stone/Laravel-Auth-Bridge) Auth driver to create/authenticate accounts.
 
 [![Latest Stable Version](https://poser.pugx.org/callmenp/lara-auth-bridge/v/stable)](https://packagist.org/packages/callmenp/lara-auth-bridge) [![Total Downloads](https://poser.pugx.org/callmenp/lara-auth-bridge/downloads)](https://packagist.org/packages/callmenp/lara-auth-bridge) [![License](https://poser.pugx.org/callmenp/lara-auth-bridge/license)](https://packagist.org/packages/callmenp/lara-auth-bridge)
 
