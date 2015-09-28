@@ -36,10 +36,8 @@ namespace laravel\bridgebb\auth\provider {
         // Login method
         public function login($username, $password)
         {
-            if (self::validate_session(['username'=>$username])) {
-				if ($user = self::_success(LOGIN_SUCCESS, self::autologin())) {
-					return $user;
-				}
+            if (self::validate_session(['username'=>$username]) && $this->_getUserByUsername($username)) {
+                return self::_success(LOGIN_SUCCESS, self::autologin());
             }
 
             if (is_null($password)) {
