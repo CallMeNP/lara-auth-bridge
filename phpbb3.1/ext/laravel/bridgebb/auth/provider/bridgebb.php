@@ -37,7 +37,9 @@ namespace laravel\bridgebb\auth\provider {
         public function login($username, $password)
         {
             if (self::validate_session(['username'=>$username])) {
-                return self::_success(LOGIN_SUCCESS, self::autologin());
+				if ($user = self::_success(LOGIN_SUCCESS, self::autologin())) {
+					return $user;
+				}
             }
 
             if (is_null($password)) {
@@ -154,9 +156,7 @@ namespace laravel\bridgebb\auth\provider {
 
         private function _handleAuthSuccess($username, $password, $user_laravel)
         {
-            $row = $this->_getUserByUsername($username);
-            // Does User exist?
-            if ($row) {
+            if ($row = $this->_getUserByUsername($username)) {
                 // User inactive
                 if ($row['user_type'] == USER_INACTIVE || $row['user_type'] == USER_IGNORE) {
                     return self::_error(LOGIN_ERROR_ACTIVE, 'ACTIVE_ERROR', $row);
