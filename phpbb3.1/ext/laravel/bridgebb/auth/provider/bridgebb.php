@@ -79,7 +79,7 @@ namespace laravel\bridgebb\auth\provider {
 
                 if (isset($oResponse['data']['username']) && isset($oResponse['code'])) {
                     if ($oResponse['code'] === '200' && $oResponse['data']['username']) {
-                        return ($user_row['username'] == $oResponse['data']['username'])?true:false;
+                        return (mb_strtolower($user_row['username']) == mb_strtolower($oResponse['data']['username']))?true:false;
                     }
                 }
 
