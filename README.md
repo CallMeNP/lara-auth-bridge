@@ -30,6 +30,14 @@ Change configs config/lara-auth-bridge.php
 // Set true if you use multiAuth, false if default Laravel Auth
 'client_auth' => false
 ```
+##### exclude URIs from CSRF protection
+In file app/Http/Middleware/VerifyCsrfToken.php add
+``` php
+protected $except = [
+        	'auth-bridge/*',
+    	];
+```
+More info how to exclude uris on [laravel site](http://laravel.com/docs/master/routing#csrf-excluding-uris)
 
 #### phpBB 3.1
 ##### copy files 
