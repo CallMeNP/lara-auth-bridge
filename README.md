@@ -1,3 +1,9 @@
+This package is unmaintained. 
+
+I do not intend to continue development on this project due to changing priorities at my day job. I'll keep the repo up in case it is still useful to anyone.
+
+Thanks @Bukashk0zzz 
+
 # Allows phpBB (3.0 & 3.1) auth over Laravel 5
 
 For Laravel 4.\* see [r-a-stone's work](https://github.com/r-a-stone/Laravel-Auth-Bridge) Auth driver to create/authenticate accounts.
